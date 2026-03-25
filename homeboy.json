@@ -1,0 +1,17 @@
+{
+  "id": "extrachill-roadie",
+  "changelog_target": "docs/CHANGELOG.md",
+  "extensions": {
+    "wordpress": {}
+  },
+  "version_targets": [
+    {
+      "file": "extrachill-roadie.php",
+      "pattern": "Version:\\s*([\\d.]+)"
+    },
+    {
+      "file": "extrachill-roadie.php",
+      "pattern": "EXTRACHILL_ROADIE_VERSION',\\s*'([\\d.]+)"
+    }
+  ]
+}

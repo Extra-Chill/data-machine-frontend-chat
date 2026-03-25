@@ -1,0 +1,18 @@
+{
+	"name": "extrachill-roadie",
+	"version": "0.1.0",
+	"description": "Floating agent chat for the Extra Chill network.",
+	"private": true,
+	"scripts": {
+		"build": "wp-scripts build",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@extrachill/chat": "^0.5.1"
+	},
+	"devDependencies": {
+		"@types/wordpress__block-editor": "^15.0.5",
+		"@wordpress/scripts": "^31.1.0",
+		"typescript": "^5.7.0"
+	}
+}
