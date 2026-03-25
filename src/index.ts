@@ -11,7 +11,7 @@ import '@extrachill/chat/css';
 import './roadie.css';
 import { createElement } from '@wordpress/element';
 import { createRoot, render } from '@wordpress/element';
-import type { ReactNode } from 'react';
+import type { ReactElement } from 'react';
 import RoadieChat from './RoadieChat';
 
 declare global {
@@ -27,7 +27,7 @@ declare global {
 
 const MOUNT_SELECTOR = '[data-ec-roadie-chat]';
 
-function mount( container: HTMLElement, component: ReactNode ): void {
+function mount( container: HTMLElement, component: ReactElement ): void {
 	if ( typeof createRoot === 'function' ) {
 		createRoot( container ).render( component );
 		return;

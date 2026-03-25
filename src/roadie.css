@@ -53,28 +53,10 @@
 /* ── Admin bar offset ────────────────────────────────── */
 /* WordPress sets --wp-admin--admin-bar--height: 32px on
    html.wp-toolbar when the admin bar is showing. We use
-   it to push the drawer and backdrop below the bar. */
+   it to push the drawer below the bar. */
 
-.admin-bar .ec-roadie__backdrop,
 .admin-bar .ec-roadie__drawer {
 	top: var(--wp-admin--admin-bar--height, 32px);
-}
-
-/* ── Backdrop ────────────────────────────────────────── */
-
-.ec-roadie__backdrop {
-	position: fixed;
-	inset: 0;
-	z-index: 9998;
-	background: rgba(0, 0, 0, 0.5);
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.25s ease;
-}
-
-.ec-roadie__backdrop.is-open {
-	opacity: 1;
-	pointer-events: auto;
 }
 
 /* ── Drawer ──────────────────────────────────────────── */
