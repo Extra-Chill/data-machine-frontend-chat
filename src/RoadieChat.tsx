@@ -16,7 +16,7 @@ import { createElement, useState, useCallback, useMemo } from '@wordpress/elemen
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Chat, DiffCard } from '@extrachill/chat';
-import type { ToolGroup, DiffData } from '@extrachill/chat';
+import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
 
 interface RoadieChatProps {
@@ -75,6 +75,14 @@ function resolveDiff(
 	} );
 }
 
+const roadieFetch: FetchFn = ( options ) =>
+	apiFetch( {
+		path: options.path,
+		method: options.method,
+		data: options.data,
+		headers: options.headers,
+	} );
+
 /**
  * Render a DiffCard for a content-editing tool result.
  *
@@ -131,13 +139,6 @@ export default function RoadieChat( {
 				agentName
 			),
 
-		// Backdrop — only rendered when open for click-to-close.
-		createElement( 'div', {
-			className: `ec-roadie__backdrop${ isOpen ? ' is-open' : '' }`,
-			onClick: close,
-			'aria-hidden': 'true',
-		} ),
-
 		// Drawer — always in DOM, toggled via CSS class for slide animation.
 		// The Chat component inside stays mounted across open/close.
 		createElement(
@@ -172,11 +173,11 @@ export default function RoadieChat( {
 			createElement(
 				'div',
 				{ className: 'ec-roadie__body' },
-				createElement( Chat, {
-					basePath,
-					fetchFn: apiFetch,
-					agentId,
-					showTools: true,
+			createElement( Chat, {
+				basePath,
+				fetchFn: roadieFetch,
+				agentId,
+				showTools: true,
 					showSessions: true,
 					toolRenderers,
 					placeholder: __( `Ask ${ agentName } anything\u2026`, 'extrachill-studio' ),
