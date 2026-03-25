@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0] - 2026-03-25
+
+### Added
+- wire DiffCard for content-editing tool previews
+
+### Changed
+- add README
+- initial release: floating agent chat for the Extra Chill network
+
+### Fixed
+- offset drawer and backdrop for WordPress admin bar
+
 ## [0.1.0] - 2026-03-25
 
 ### Added

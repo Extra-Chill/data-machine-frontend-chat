@@ -3,7 +3,7 @@
  * Plugin Name: Extra Chill Roadie
  * Plugin URI: https://extrachill.com
  * Description: Floating agent chat for the Extra Chill network. Connects to Data Machine's agent system to provide an AI assistant on any site.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Chris Huber
  * Author URI: https://chubes.net
  * License: GPL v2 or later
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EXTRACHILL_ROADIE_VERSION', '0.1.0' );
+define( 'EXTRACHILL_ROADIE_VERSION', '0.2.0' );
 define( 'EXTRACHILL_ROADIE_PLUGIN_FILE', __FILE__ );
 define( 'EXTRACHILL_ROADIE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EXTRACHILL_ROADIE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
