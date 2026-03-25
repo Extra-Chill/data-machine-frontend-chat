@@ -1,6 +1,7 @@
 {
   "id": "extrachill-roadie",
   "changelog_target": "docs/CHANGELOG.md",
+  "remote_path": "wp-content/plugins/extrachill-roadie",
   "extensions": {
     "wordpress": {}
   },
