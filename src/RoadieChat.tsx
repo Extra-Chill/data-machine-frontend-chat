@@ -15,7 +15,11 @@
 import { createElement, useState, useCallback, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
-import { Chat, DiffCard } from '@extrachill/chat';
+import {
+	Chat,
+	DiffCard,
+	useClientContextMetadata,
+} from '@extrachill/chat';
 import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
 
@@ -41,7 +45,6 @@ function parseDiffFromToolResult( group: ToolGroup ): DiffData | null {
 		const result = JSON.parse( group.resultMessage.content );
 		const data = result.data ?? result;
 
-		// Only render DiffCard for preview results.
 		if ( ! data.preview || ! data.diff ) {
 			return null;
 		}
@@ -58,13 +61,7 @@ function parseDiffFromToolResult( group: ToolGroup ): DiffData | null {
 	}
 }
 
-/**
- * Call the core resolve-diff endpoint.
- */
-function resolveDiff(
-	diffId: string,
-	decision: 'accepted' | 'rejected'
-): void {
+function resolveDiff( diffId: string, decision: 'accepted' | 'rejected' ): void {
 	apiFetch( {
 		path: '/datamachine/v1/diff/resolve',
 		method: 'POST',
@@ -83,12 +80,6 @@ const roadieFetch: FetchFn = ( options ) =>
 		headers: options.headers,
 	} );
 
-/**
- * Render a DiffCard for a content-editing tool result.
- *
- * Falls back to null (default ToolMessage rendering) when the tool
- * result is not a preview diff.
- */
 function renderDiffCard( group: ToolGroup ): ReactNode {
 	const diff = parseDiffFromToolResult( group );
 	if ( ! diff ) {
@@ -109,11 +100,10 @@ export default function RoadieChat( {
 	agentDescription,
 }: RoadieChatProps ) {
 	const [ isOpen, setIsOpen ] = useState( false );
+	const metadata = useClientContextMetadata();
 	const open = useCallback( () => setIsOpen( true ), [] );
 	const close = useCallback( () => setIsOpen( false ), [] );
 
-	// Tool renderers — register DiffCard for content-editing tools.
-	// Memoized so the Chat component doesn't re-render unnecessarily.
 	const toolRenderers = useMemo(
 		() => ( {
 			edit_post_blocks: renderDiffCard,
@@ -125,8 +115,6 @@ export default function RoadieChat( {
 	return createElement(
 		'div',
 		{ className: 'ec-roadie' },
-
-		// FAB — hidden when drawer is open.
 		! isOpen &&
 			createElement(
 				'button',
@@ -138,17 +126,12 @@ export default function RoadieChat( {
 				},
 				agentName
 			),
-
-		// Drawer — always in DOM, toggled via CSS class for slide animation.
-		// The Chat component inside stays mounted across open/close.
 		createElement(
 			'div',
 			{
 				className: `ec-roadie__drawer${ isOpen ? ' is-open' : '' }`,
 				'aria-hidden': ! isOpen,
 			},
-
-			// Header
 			createElement(
 				'div',
 				{ className: 'ec-roadie__header' },
@@ -165,27 +148,21 @@ export default function RoadieChat( {
 						onClick: close,
 						'aria-label': __( 'Close', 'extrachill-studio' ),
 					},
-					'\u2715'
+					'✕'
 				)
 			),
-
-			// Chat body — always mounted.
 			createElement(
 				'div',
 				{ className: 'ec-roadie__body' },
-			createElement( Chat, {
-				basePath,
-				fetchFn: roadieFetch,
-				agentId,
-				showTools: true,
+				createElement( Chat, {
+					basePath,
+					fetchFn: roadieFetch,
+					agentId,
+					showTools: true,
 					showSessions: true,
 					toolRenderers,
-					placeholder: __( `Ask ${ agentName } anything\u2026`, 'extrachill-studio' ),
-					metadata: {
-						client_context: {
-							site: window.location.hostname,
-						},
-					},
+					placeholder: __( `Ask ${ agentName } anything…`, 'extrachill-studio' ),
+					metadata,
 					emptyState: createElement(
 						'div',
 						{ className: 'ec-roadie__empty' },
@@ -193,7 +170,7 @@ export default function RoadieChat( {
 						createElement( 'p', null, agentDescription )
 					),
 					processingLabel: ( turnCount: number ) =>
-						__( `Working\u2026 (turn ${ turnCount })`, 'extrachill-studio' ),
+						__( `Working… (turn ${ turnCount })`, 'extrachill-studio' ),
 				} )
 			)
 		)
