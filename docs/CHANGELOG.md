@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0] - 2026-03-26
+
+### Added
+- render canonical preview diffs in Roadie
+
+### Changed
+- use shared chat client context metadata
+
+### Fixed
+- keep Roadie non-modal during page collaboration
+
 ## [0.2.0] - 2026-03-25
 
 ### Added
