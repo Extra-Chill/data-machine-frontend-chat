@@ -141,6 +141,93 @@
 	overflow: hidden;
 }
 
+.ec-roadie__chatbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--spacing-sm);
+	padding: var(--spacing-sm) var(--spacing-md) 0;
+	flex-wrap: wrap;
+}
+
+.ec-roadie__session-summary {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.ec-roadie__session-label {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--text-color);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 220px;
+}
+
+.ec-roadie__session-count {
+	font-size: 11px;
+	color: var(--muted-text);
+}
+
+.ec-roadie__session-actions {
+	display: flex;
+	gap: 8px;
+	margin-left: auto;
+}
+
+.ec-roadie__session-button {
+	border: 1px solid var(--border-color);
+	background: var(--background-color);
+	color: var(--text-color);
+	border-radius: 999px;
+	padding: 6px 12px;
+	font: inherit;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.ec-roadie__session-button:hover {
+	background: var(--card-background);
+}
+
+.ec-roadie__session-button--new {
+	font-weight: 600;
+}
+
+.ec-roadie__session-list {
+	display: flex;
+	gap: 8px;
+	padding: 0 var(--spacing-md) var(--spacing-sm);
+	overflow-x: auto;
+	flex: 0 0 100%;
+	scrollbar-width: thin;
+}
+
+.ec-roadie__session-chip {
+	border: 1px solid var(--border-color);
+	background: var(--background-color);
+	color: var(--text-color);
+	border-radius: 999px;
+	padding: 6px 10px;
+	font: inherit;
+	font-size: 12px;
+	white-space: nowrap;
+	cursor: pointer;
+	max-width: 180px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex: 0 0 auto;
+}
+
+.ec-roadie__session-chip.is-active {
+	background: var(--accent);
+	color: var(--background-color);
+	border-color: var(--accent);
+}
+
 /* Map @extrachill/chat CSS variables to EC theme tokens. */
 .ec-roadie__body .ec-chat {
 	--ec-chat-bg: var(--card-background);

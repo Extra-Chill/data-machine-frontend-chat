@@ -19,8 +19,10 @@ import {
 	Chat,
 	DiffCard,
 	useClientContextMetadata,
+	parseCanonicalDiffFromToolGroup,
 } from '@extrachill/chat';
 import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
+import type { UseChatReturn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
 
 interface RoadieChatProps {
@@ -37,28 +39,7 @@ interface RoadieChatProps {
  * was called without preview=true, or the result is malformed).
  */
 function parseDiffFromToolResult( group: ToolGroup ): DiffData | null {
-	if ( ! group.resultMessage ) {
-		return null;
-	}
-
-	try {
-		const result = JSON.parse( group.resultMessage.content );
-		const data = result.data ?? result;
-
-		if ( ! data.preview || ! data.diff ) {
-			return null;
-		}
-
-		return {
-			diffId: data.diff.diffId ?? data.diff_id ?? '',
-			diffType: data.diff.diffType ?? 'edit',
-			originalContent: data.diff.originalContent ?? '',
-			replacementContent: data.diff.replacementContent ?? '',
-			summary: data.message,
-		};
-	} catch {
-		return null;
-	}
+	return parseCanonicalDiffFromToolGroup( group );
 }
 
 function resolveDiff( diffId: string, decision: 'accepted' | 'rejected' ): void {
@@ -93,6 +74,74 @@ function renderDiffCard( group: ToolGroup ): ReactNode {
 	} );
 }
 
+function getSessionLabel( chat: UseChatReturn ): string {
+	if ( ! chat.sessionId ) {
+		return 'New chat';
+	}
+
+	const activeSession = chat.sessions.find( ( session ) => session.id === chat.sessionId );
+	if ( activeSession?.title ) {
+		return activeSession.title;
+	}
+
+	return `Session ${ chat.sessionId.slice( 0, 8 ) }`;
+}
+
+function renderRoadieHeaderControls( chat: UseChatReturn ): ReactNode {
+	return createElement(
+		'div',
+		{ className: 'ec-roadie__chatbar' },
+		createElement(
+			'div',
+			{ className: 'ec-roadie__session-summary' },
+			createElement( 'span', { className: 'ec-roadie__session-label' }, getSessionLabel( chat ) ),
+			createElement( 'span', { className: 'ec-roadie__session-count' }, `${ chat.sessions.length } saved` )
+		),
+		createElement(
+			'div',
+			{ className: 'ec-roadie__session-actions' },
+			createElement(
+				'button',
+				{
+					type: 'button',
+					className: 'ec-roadie__session-button',
+					onClick: () => chat.refreshSessions(),
+					disabled: chat.sessionsLoading,
+				},
+				chat.sessionsLoading ? 'Refreshing…' : 'Refresh'
+			),
+			createElement(
+				'button',
+				{
+					type: 'button',
+					className: 'ec-roadie__session-button ec-roadie__session-button--new',
+					onClick: () => chat.newSession(),
+				},
+				'New'
+			)
+		),
+		chat.sessions.length > 0 &&
+			createElement(
+				'div',
+				{ className: 'ec-roadie__session-list' },
+				...chat.sessions.slice( 0, 6 ).map( ( session ) =>
+					createElement(
+						'button',
+						{
+							key: session.id,
+							type: 'button',
+							className:
+								'ec-roadie__session-chip' +
+								( session.id === chat.sessionId ? ' is-active' : '' ),
+							onClick: () => chat.switchSession( session.id ),
+						},
+						session.title ?? `Session ${ session.id.slice( 0, 8 ) }`
+					)
+				)
+			)
+	);
+}
+
 export default function RoadieChat( {
 	agentId,
 	basePath,
@@ -108,6 +157,7 @@ export default function RoadieChat( {
 		() => ( {
 			edit_post_blocks: renderDiffCard,
 			replace_post_blocks: renderDiffCard,
+			insert_content: renderDiffCard,
 		} ),
 		[]
 	);
@@ -160,9 +210,14 @@ export default function RoadieChat( {
 					agentId,
 					showTools: true,
 					showSessions: true,
+					sessionUi: 'none',
 					toolRenderers,
+					renderHeader: renderRoadieHeaderControls,
 					placeholder: __( `Ask ${ agentName } anything…`, 'extrachill-studio' ),
 					metadata,
+					showCopyTranscript: true,
+					copyTranscriptLabel: __( 'Copy', 'extrachill-studio' ),
+					copyTranscriptCopiedLabel: __( 'Copied!', 'extrachill-studio' ),
 					emptyState: createElement(
 						'div',
 						{ className: 'ec-roadie__empty' },
