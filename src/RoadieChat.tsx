@@ -119,26 +119,7 @@ function renderRoadieHeaderControls( chat: UseChatReturn ): ReactNode {
 				},
 				'New'
 			)
-		),
-		chat.sessions.length > 0 &&
-			createElement(
-				'div',
-				{ className: 'ec-roadie__session-list' },
-				...chat.sessions.slice( 0, 6 ).map( ( session ) =>
-					createElement(
-						'button',
-						{
-							key: session.id,
-							type: 'button',
-							className:
-								'ec-roadie__session-chip' +
-								( session.id === chat.sessionId ? ' is-active' : '' ),
-							onClick: () => chat.switchSession( session.id ),
-						},
-						session.title ?? `Session ${ session.id.slice( 0, 8 ) }`
-					)
-				)
-			)
+		)
 	);
 }
 
@@ -210,22 +191,20 @@ export default function RoadieChat( {
 					agentId,
 					showTools: true,
 					showSessions: true,
-					sessionUi: 'none',
+					sessionUi: 'list',
 					toolRenderers,
 					renderHeader: renderRoadieHeaderControls,
 					placeholder: __( `Ask ${ agentName } anything…`, 'extrachill-studio' ),
 					metadata,
-					showCopyTranscript: true,
-					copyTranscriptLabel: __( 'Copy', 'extrachill-studio' ),
-					copyTranscriptCopiedLabel: __( 'Copied!', 'extrachill-studio' ),
 					emptyState: createElement(
 						'div',
 						{ className: 'ec-roadie__empty' },
 						createElement( 'h3', null, agentName ),
 						createElement( 'p', null, agentDescription )
 					),
-					processingLabel: ( turnCount: number ) =>
-						__( `Working… (turn ${ turnCount })`, 'extrachill-studio' ),
+				loadingMessages: true,
+				processingLabel: ( turnCount: number ) =>
+					__( `Working… (turn ${ turnCount })`, 'extrachill-studio' ),
 				} )
 			)
 		)

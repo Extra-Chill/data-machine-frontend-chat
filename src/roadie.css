@@ -176,6 +176,7 @@
 	display: flex;
 	gap: 8px;
 	margin-left: auto;
+	align-items: center;
 }
 
 .ec-roadie__session-button {
@@ -197,36 +198,6 @@
 	font-weight: 600;
 }
 
-.ec-roadie__session-list {
-	display: flex;
-	gap: 8px;
-	padding: 0 var(--spacing-md) var(--spacing-sm);
-	overflow-x: auto;
-	flex: 0 0 100%;
-	scrollbar-width: thin;
-}
-
-.ec-roadie__session-chip {
-	border: 1px solid var(--border-color);
-	background: var(--background-color);
-	color: var(--text-color);
-	border-radius: 999px;
-	padding: 6px 10px;
-	font: inherit;
-	font-size: 12px;
-	white-space: nowrap;
-	cursor: pointer;
-	max-width: 180px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	flex: 0 0 auto;
-}
-
-.ec-roadie__session-chip.is-active {
-	background: var(--accent);
-	color: var(--background-color);
-	border-color: var(--accent);
-}
 
 /* Map @extrachill/chat CSS variables to EC theme tokens. */
 .ec-roadie__body .ec-chat {
