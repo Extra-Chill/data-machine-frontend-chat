@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.1] - 2026-03-29
+
+### Changed
+- remove visibility system, defer to DM's can_access_agent
+
 ## [0.4.0] - 2026-03-29
 
 ### Added
