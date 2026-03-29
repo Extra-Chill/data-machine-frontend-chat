@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0] - 2026-03-29
+
+### Added
+- enable cycling loading messages in Roadie chat
+
+### Changed
+- rename to data-machine-frontend-chat (generic DM widget)
+
+### Fixed
+- PHPCS alignment warnings in config.php
+- remove Network: true — per-site activation only
+
 ## [0.3.0] - 2026-03-26
 
 ### Added
