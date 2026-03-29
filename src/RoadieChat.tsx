@@ -179,7 +179,7 @@ export default function RoadieChat( {
 						onClick: close,
 						'aria-label': __( 'Close', 'data-machine-frontend-chat' ),
 					},
-					'✕'
+					'\u00D7'
 				)
 			),
 			createElement(
@@ -191,7 +191,7 @@ export default function RoadieChat( {
 					agentId,
 					showTools: true,
 					showSessions: true,
-					sessionUi: 'list',
+					sessionUi: 'none',
 					toolRenderers,
 					renderHeader: renderRoadieHeaderControls,
 					placeholder: __( `Ask ${ agentName } anything…`, 'data-machine-frontend-chat' ),
