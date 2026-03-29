@@ -25,7 +25,7 @@ declare global {
 	}
 }
 
-const MOUNT_SELECTOR = '[data-datamachine-chat-chat]';
+const MOUNT_SELECTOR = '[data-datamachine-chat]';
 
 function mount( container: HTMLElement, component: ReactElement ): void {
 	if ( typeof createRoot === 'function' ) {
