@@ -9,7 +9,7 @@
  * with preview mode, the tool result is rendered as a DiffCard with
  * Accept/Reject buttons instead of raw JSON.
  *
- * @package ExtraChillRoadie
+ * @package DataMachineFrontendChat
  * @since 0.3.0
  */
 import { createElement, useState, useCallback, useMemo } from '@wordpress/element';
@@ -90,21 +90,21 @@ function getSessionLabel( chat: UseChatReturn ): string {
 function renderRoadieHeaderControls( chat: UseChatReturn ): ReactNode {
 	return createElement(
 		'div',
-		{ className: 'ec-roadie__chatbar' },
+		{ className: 'datamachine-chat__chatbar' },
 		createElement(
 			'div',
-			{ className: 'ec-roadie__session-summary' },
-			createElement( 'span', { className: 'ec-roadie__session-label' }, getSessionLabel( chat ) ),
-			createElement( 'span', { className: 'ec-roadie__session-count' }, `${ chat.sessions.length } saved` )
+			{ className: 'datamachine-chat__session-summary' },
+			createElement( 'span', { className: 'datamachine-chat__session-label' }, getSessionLabel( chat ) ),
+			createElement( 'span', { className: 'datamachine-chat__session-count' }, `${ chat.sessions.length } saved` )
 		),
 		createElement(
 			'div',
-			{ className: 'ec-roadie__session-actions' },
+			{ className: 'datamachine-chat__session-actions' },
 			createElement(
 				'button',
 				{
 					type: 'button',
-					className: 'ec-roadie__session-button',
+					className: 'datamachine-chat__session-button',
 					onClick: () => chat.refreshSessions(),
 					disabled: chat.sessionsLoading,
 				},
@@ -114,7 +114,7 @@ function renderRoadieHeaderControls( chat: UseChatReturn ): ReactNode {
 				'button',
 				{
 					type: 'button',
-					className: 'ec-roadie__session-button ec-roadie__session-button--new',
+					className: 'datamachine-chat__session-button datamachine-chat__session-button--new',
 					onClick: () => chat.newSession(),
 				},
 				'New'
@@ -145,46 +145,46 @@ export default function RoadieChat( {
 
 	return createElement(
 		'div',
-		{ className: 'ec-roadie' },
+		{ className: 'datamachine-chat' },
 		! isOpen &&
 			createElement(
 				'button',
 				{
 					type: 'button',
-					className: 'ec-roadie__fab',
+					className: 'datamachine-chat__fab',
 					onClick: open,
-					'aria-label': __( `Open ${ agentName } chat`, 'extrachill-studio' ),
+					'aria-label': __( `Open ${ agentName } chat`, 'data-machine-frontend-chat' ),
 				},
 				agentName
 			),
 		createElement(
 			'div',
 			{
-				className: `ec-roadie__drawer${ isOpen ? ' is-open' : '' }`,
+				className: `datamachine-chat__drawer${ isOpen ? ' is-open' : '' }`,
 				'aria-hidden': ! isOpen,
 			},
 			createElement(
 				'div',
-				{ className: 'ec-roadie__header' },
+				{ className: 'datamachine-chat__header' },
 				createElement(
 					'span',
-					{ className: 'ec-roadie__title' },
+					{ className: 'datamachine-chat__title' },
 					agentName
 				),
 				createElement(
 					'button',
 					{
 						type: 'button',
-						className: 'ec-roadie__close',
+						className: 'datamachine-chat__close',
 						onClick: close,
-						'aria-label': __( 'Close', 'extrachill-studio' ),
+						'aria-label': __( 'Close', 'data-machine-frontend-chat' ),
 					},
 					'✕'
 				)
 			),
 			createElement(
 				'div',
-				{ className: 'ec-roadie__body' },
+				{ className: 'datamachine-chat__body' },
 				createElement( Chat, {
 					basePath,
 					fetchFn: roadieFetch,
@@ -194,17 +194,17 @@ export default function RoadieChat( {
 					sessionUi: 'list',
 					toolRenderers,
 					renderHeader: renderRoadieHeaderControls,
-					placeholder: __( `Ask ${ agentName } anything…`, 'extrachill-studio' ),
+					placeholder: __( `Ask ${ agentName } anything…`, 'data-machine-frontend-chat' ),
 					metadata,
 					emptyState: createElement(
 						'div',
-						{ className: 'ec-roadie__empty' },
+						{ className: 'datamachine-chat__empty' },
 						createElement( 'h3', null, agentName ),
 						createElement( 'p', null, agentDescription )
 					),
 				loadingMessages: true,
 				processingLabel: ( turnCount: number ) =>
-					__( `Working… (turn ${ turnCount })`, 'extrachill-studio' ),
+					__( `Working… (turn ${ turnCount })`, 'data-machine-frontend-chat' ),
 				} )
 			)
 		)

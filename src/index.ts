@@ -1,11 +1,11 @@
 /**
- * Roadie — Floating chat entry point.
+ * Data Machine Frontend Chat — Entry point.
  *
- * Standalone script enqueued on all studio.extrachill.com pages for
- * authenticated team members. Completely independent of the Studio block.
+ * Standalone script enqueued on frontend pages for eligible users.
+ * Mounts a configurable Data Machine agent chat widget.
  *
- * @package ExtraChillStudio
- * @since 0.3.0
+ * @package DataMachineFrontendChat
+ * @since 0.4.0
  */
 import '@extrachill/chat/css';
 import './roadie.css';
@@ -16,7 +16,7 @@ import RoadieChat from './RoadieChat';
 
 declare global {
 	interface Window {
-		ecRoadieConfig?: {
+		datamachineChatConfig?: {
 			agentId: number;
 			basePath: string;
 			agentName: string;
@@ -25,7 +25,7 @@ declare global {
 	}
 }
 
-const MOUNT_SELECTOR = '[data-ec-roadie-chat]';
+const MOUNT_SELECTOR = '[data-datamachine-chat-chat]';
 
 function mount( container: HTMLElement, component: ReactElement ): void {
 	if ( typeof createRoot === 'function' ) {
@@ -43,7 +43,7 @@ function init(): void {
 		return;
 	}
 
-	const config = window.ecRoadieConfig;
+	const config = window.datamachineChatConfig;
 	if ( ! config?.agentId ) {
 		return;
 	}

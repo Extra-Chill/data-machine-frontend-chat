@@ -1,18 +1,18 @@
 {
-  "id": "extrachill-roadie",
+  "id": "data-machine-frontend-chat",
   "changelog_target": "docs/CHANGELOG.md",
-  "remote_path": "wp-content/plugins/extrachill-roadie",
+  "remote_path": "wp-content/plugins/data-machine-frontend-chat",
   "extensions": {
     "wordpress": {}
   },
   "version_targets": [
     {
-      "file": "extrachill-roadie.php",
+      "file": "data-machine-frontend-chat.php",
       "pattern": "Version:\\s*([\\d.]+)"
     },
     {
-      "file": "extrachill-roadie.php",
-      "pattern": "EXTRACHILL_ROADIE_VERSION',\\s*'([\\d.]+)"
+      "file": "data-machine-frontend-chat.php",
+      "pattern": "DATA_MACHINE_FRONTEND_CHAT_VERSION',\\s*'([\\d.]+)"
     }
   ]
 }

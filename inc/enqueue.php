@@ -2,7 +2,7 @@
 /**
  * Roadie script and style enqueue + mount container.
  *
- * @package ExtraChillRoadie
+ * @package DataMachineFrontendChat
  * @since 0.1.0
  */
 
@@ -19,24 +19,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return void
  */
-function extrachill_roadie_enqueue() {
-	$config = extrachill_roadie_get_config();
+function data_machine_frontend_chat_enqueue() {
+	$config = data_machine_frontend_chat_get_config();
 
 	if ( empty( $config['enabled'] ) || empty( $config['agent_slug'] ) ) {
 		return;
 	}
 
-	if ( ! extrachill_roadie_user_can_see( $config ) ) {
+	if ( ! data_machine_frontend_chat_user_can_see( $config ) ) {
 		return;
 	}
 
-	$agent = extrachill_roadie_resolve_agent( $config['agent_slug'] );
+	$agent = data_machine_frontend_chat_resolve_agent( $config['agent_slug'] );
 	if ( ! $agent ) {
 		return;
 	}
 
-	$build_dir = EXTRACHILL_ROADIE_PLUGIN_DIR . 'build/';
-	$build_url = EXTRACHILL_ROADIE_PLUGIN_URL . 'build/';
+	$build_dir = DATA_MACHINE_FRONTEND_CHAT_PLUGIN_DIR . 'build/';
+	$build_url = DATA_MACHINE_FRONTEND_CHAT_PLUGIN_URL . 'build/';
 	$asset_php = $build_dir . 'index.asset.php';
 
 	if ( ! file_exists( $asset_php ) ) {
@@ -46,25 +46,25 @@ function extrachill_roadie_enqueue() {
 	$asset = require $asset_php;
 
 	wp_enqueue_script(
-		'extrachill-roadie',
+		'data-machine-frontend-chat',
 		$build_url . 'index.js',
 		$asset['dependencies'] ?? array(),
-		$asset['version'] ?? EXTRACHILL_ROADIE_VERSION,
+		$asset['version'] ?? DATA_MACHINE_FRONTEND_CHAT_VERSION,
 		array( 'in_footer' => true )
 	);
 
 	if ( file_exists( $build_dir . 'index.css' ) ) {
 		wp_enqueue_style(
-			'extrachill-roadie',
+			'data-machine-frontend-chat',
 			$build_url . 'index.css',
 			array(),
-			$asset['version'] ?? EXTRACHILL_ROADIE_VERSION
+			$asset['version'] ?? DATA_MACHINE_FRONTEND_CHAT_VERSION
 		);
 	}
 
 	wp_localize_script(
-		'extrachill-roadie',
-		'ecRoadieConfig',
+		'data-machine-frontend-chat',
+		'datamachineChatConfig',
 		array(
 			'agentId'          => (int) $agent['agent_id'],
 			'basePath'         => '/datamachine/v1/chat',
@@ -73,7 +73,7 @@ function extrachill_roadie_enqueue() {
 		)
 	);
 }
-add_action( 'wp_enqueue_scripts', 'extrachill_roadie_enqueue' );
+add_action( 'wp_enqueue_scripts', 'data_machine_frontend_chat_enqueue' );
 
 /**
  * Render the Roadie chat mount container in wp_footer.
@@ -82,11 +82,11 @@ add_action( 'wp_enqueue_scripts', 'extrachill_roadie_enqueue' );
  *
  * @return void
  */
-function extrachill_roadie_render_container() {
-	if ( ! wp_script_is( 'extrachill-roadie', 'enqueued' ) ) {
+function data_machine_frontend_chat_render_container() {
+	if ( ! wp_script_is( 'data-machine-frontend-chat', 'enqueued' ) ) {
 		return;
 	}
 
-	echo '<div data-ec-roadie-chat></div>';
+	echo '<div data-datamachine-chat-chat></div>';
 }
-add_action( 'wp_footer', 'extrachill_roadie_render_container', 50 );
+add_action( 'wp_footer', 'data_machine_frontend_chat_render_container', 50 );

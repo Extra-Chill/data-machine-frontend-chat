@@ -1,15 +1,22 @@
 /**
- * Roadie — Floating agent chat styles.
+ * Data Machine Frontend Chat — Floating agent chat styles.
  *
- * Standalone stylesheet, independent of the Studio block.
- * Uses EC theme tokens for colors and spacing.
+ * Standalone stylesheet for the floating chat widget.
+ * Consumes CSS custom properties for theming — see theme contract below.
  *
- * @package ExtraChillStudio
- * @since 0.3.0
+ * Theme contract (override these in your theme's :root):
+ *   --header-background, --header-text-color, --font-family-heading,
+ *   --font-family-body, --font-size-base, --font-size-lg,
+ *   --card-background, --background-color, --border-color,
+ *   --text-color, --muted-text, --accent,
+ *   --spacing-xs, --spacing-sm, --spacing-md, --spacing-lg
+ *
+ * @package DataMachineFrontendChat
+ * @since 0.4.0
  */
 
 /* Root container — viewport-level, non-interactive wrapper. */
-.ec-roadie {
+.datamachine-chat {
 	position: fixed;
 	z-index: 9999;
 	inset: 0;
@@ -18,7 +25,7 @@
 
 /* ── FAB ─────────────────────────────────────────────── */
 
-.ec-roadie__fab {
+.datamachine-chat__fab {
 	position: fixed;
 	z-index: 9999;
 	bottom: var(--spacing-lg, 24px);
@@ -30,10 +37,10 @@
 	padding: 0 var(--spacing-lg, 24px);
 	border: none;
 	border-radius: 28px;
-	background: var(--header-background);
-	color: var(--header-text-color);
-	font-family: var(--font-family-heading);
-	font-size: var(--font-size-base);
+	background: var(--header-background, #1a1a2e);
+	color: var(--header-text-color, #fff);
+	font-family: var(--font-family-heading, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+	font-size: var(--font-size-base, 15px);
 	font-weight: 700;
 	cursor: pointer;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
@@ -41,12 +48,12 @@
 	pointer-events: auto;
 }
 
-.ec-roadie__fab:hover {
+.datamachine-chat__fab:hover {
 	transform: translateY(-2px);
 	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.ec-roadie__fab:active {
+.datamachine-chat__fab:active {
 	transform: translateY(0);
 }
 
@@ -55,13 +62,13 @@
    html.wp-toolbar when the admin bar is showing. We use
    it to push the drawer below the bar. */
 
-.admin-bar .ec-roadie__drawer {
+.admin-bar .datamachine-chat__drawer {
 	top: var(--wp-admin--admin-bar--height, 32px);
 }
 
 /* ── Drawer ──────────────────────────────────────────── */
 
-.ec-roadie__drawer {
+.datamachine-chat__drawer {
 	position: fixed;
 	z-index: 9999;
 	top: 0;
@@ -71,8 +78,8 @@
 	max-width: 420px;
 	display: flex;
 	flex-direction: column;
-	background: var(--card-background);
-	border-left: 1px solid var(--border-color);
+	background: var(--card-background, #f1f5f9);
+	border-left: 1px solid var(--border-color, #e2e8f0);
 	box-shadow: -4px 0 24px rgba(0, 0, 0, 0.2);
 	pointer-events: auto;
 
@@ -81,40 +88,40 @@
 	transition: transform 0.25s ease;
 }
 
-.ec-roadie__drawer.is-open {
+.datamachine-chat__drawer.is-open {
 	transform: translateX(0);
 }
 
 /* When closed, prevent tab focus inside the drawer. */
-.ec-roadie__drawer:not(.is-open) {
+.datamachine-chat__drawer:not(.is-open) {
 	visibility: hidden;
 	transition: transform 0.25s ease, visibility 0s 0.25s;
 }
 
-.ec-roadie__drawer.is-open {
+.datamachine-chat__drawer.is-open {
 	visibility: visible;
 	transition: transform 0.25s ease, visibility 0s 0s;
 }
 
 /* ── Header ──────────────────────────────────────────── */
 
-.ec-roadie__header {
+.datamachine-chat__header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: var(--spacing-sm) var(--spacing-md);
-	border-bottom: 1px solid var(--border-color);
+	padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+	border-bottom: 1px solid var(--border-color, #e2e8f0);
 	flex-shrink: 0;
 }
 
-.ec-roadie__title {
-	font-family: var(--font-family-heading);
-	font-size: var(--font-size-lg);
+.datamachine-chat__title {
+	font-family: var(--font-family-heading, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+	font-size: var(--font-size-lg, 18px);
 	font-weight: 700;
-	color: var(--text-color);
+	color: var(--text-color, #1e293b);
 }
 
-.ec-roadie__close {
+.datamachine-chat__close {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -123,66 +130,66 @@
 	border: none;
 	border-radius: 50%;
 	background: transparent;
-	color: var(--text-color);
+	color: var(--text-color, #1e293b);
 	font-size: 18px;
 	cursor: pointer;
 	transition: background 0.15s;
 }
 
-.ec-roadie__close:hover {
-	background: var(--background-color);
+.datamachine-chat__close:hover {
+	background: var(--background-color, #f8fafc);
 }
 
 /* ── Body (Chat) ─────────────────────────────────────── */
 
-.ec-roadie__body {
+.datamachine-chat__body {
 	flex: 1;
 	min-height: 0;
 	overflow: hidden;
 }
 
-.ec-roadie__chatbar {
+.datamachine-chat__chatbar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: var(--spacing-sm);
-	padding: var(--spacing-sm) var(--spacing-md) 0;
+	gap: var(--spacing-sm, 8px);
+	padding: var(--spacing-sm, 8px) var(--spacing-md, 16px) 0;
 	flex-wrap: wrap;
 }
 
-.ec-roadie__session-summary {
+.datamachine-chat__session-summary {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 	min-width: 0;
 }
 
-.ec-roadie__session-label {
+.datamachine-chat__session-label {
 	font-size: 13px;
 	font-weight: 600;
-	color: var(--text-color);
+	color: var(--text-color, #1e293b);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	max-width: 220px;
 }
 
-.ec-roadie__session-count {
+.datamachine-chat__session-count {
 	font-size: 11px;
-	color: var(--muted-text);
+	color: var(--muted-text, #94a3b8);
 }
 
-.ec-roadie__session-actions {
+.datamachine-chat__session-actions {
 	display: flex;
 	gap: 8px;
 	margin-left: auto;
 	align-items: center;
 }
 
-.ec-roadie__session-button {
-	border: 1px solid var(--border-color);
-	background: var(--background-color);
-	color: var(--text-color);
+.datamachine-chat__session-button {
+	border: 1px solid var(--border-color, #e2e8f0);
+	background: var(--background-color, #f8fafc);
+	color: var(--text-color, #1e293b);
 	border-radius: 999px;
 	padding: 6px 12px;
 	font: inherit;
@@ -190,35 +197,35 @@
 	cursor: pointer;
 }
 
-.ec-roadie__session-button:hover {
-	background: var(--card-background);
+.datamachine-chat__session-button:hover {
+	background: var(--card-background, #f1f5f9);
 }
 
-.ec-roadie__session-button--new {
+.datamachine-chat__session-button--new {
 	font-weight: 600;
 }
 
 
-/* Map @extrachill/chat CSS variables to EC theme tokens. */
-.ec-roadie__body .ec-chat {
-	--ec-chat-bg: var(--card-background);
-	--ec-chat-text: var(--text-color);
-	--ec-chat-text-muted: var(--muted-text);
-	--ec-chat-border: var(--border-color);
-	--ec-chat-user-bg: var(--accent);
-	--ec-chat-user-text: var(--background-color);
-	--ec-chat-assistant-bg: var(--background-color);
-	--ec-chat-assistant-text: var(--text-color);
-	--ec-chat-input-bg: var(--background-color);
-	--ec-chat-input-border: var(--border-color);
-	--ec-chat-input-focus-border: var(--accent);
-	--ec-chat-send-bg: var(--accent);
-	--ec-chat-send-text: var(--background-color);
-	--ec-chat-tool-bg: var(--background-color);
-	--ec-chat-tool-border: var(--border-color);
-	--ec-chat-session-active-bg: var(--background-color);
-	--ec-chat-session-hover-bg: var(--background-color);
-	--ec-chat-font-family: var(--font-family-body);
+/* Map @extrachill/chat CSS variables to theme tokens (with fallbacks). */
+.datamachine-chat__body .ec-chat {
+	--ec-chat-bg: var(--card-background, #f1f5f9);
+	--ec-chat-text: var(--text-color, #1e293b);
+	--ec-chat-text-muted: var(--muted-text, #94a3b8);
+	--ec-chat-border: var(--border-color, #e2e8f0);
+	--ec-chat-user-bg: var(--accent, #2563eb);
+	--ec-chat-user-text: var(--background-color, #f8fafc);
+	--ec-chat-assistant-bg: var(--background-color, #f8fafc);
+	--ec-chat-assistant-text: var(--text-color, #1e293b);
+	--ec-chat-input-bg: var(--background-color, #f8fafc);
+	--ec-chat-input-border: var(--border-color, #e2e8f0);
+	--ec-chat-input-focus-border: var(--accent, #2563eb);
+	--ec-chat-send-bg: var(--accent, #2563eb);
+	--ec-chat-send-text: var(--background-color, #f8fafc);
+	--ec-chat-tool-bg: var(--background-color, #f8fafc);
+	--ec-chat-tool-border: var(--border-color, #e2e8f0);
+	--ec-chat-session-active-bg: var(--background-color, #f8fafc);
+	--ec-chat-session-hover-bg: var(--background-color, #f8fafc);
+	--ec-chat-font-family: var(--font-family-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
 	--ec-chat-border-radius: 0;
 
 	height: 100%;
@@ -227,26 +234,26 @@
 
 /* ── Empty state ─────────────────────────────────────── */
 
-.ec-roadie__empty {
+.datamachine-chat__empty {
 	text-align: center;
-	padding: var(--spacing-lg);
+	padding: var(--spacing-lg, 24px);
 }
 
-.ec-roadie__empty h3 {
-	margin: 0 0 var(--spacing-xs);
-	font-family: var(--font-family-heading);
-	color: var(--text-color);
+.datamachine-chat__empty h3 {
+	margin: 0 0 var(--spacing-xs, 4px);
+	font-family: var(--font-family-heading, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+	color: var(--text-color, #1e293b);
 }
 
-.ec-roadie__empty p {
+.datamachine-chat__empty p {
 	margin: 0;
-	color: var(--muted-text);
+	color: var(--muted-text, #94a3b8);
 }
 
 /* ── Mobile ──────────────────────────────────────────── */
 
 @media (max-width: 768px) {
-	.ec-roadie__drawer {
+	.datamachine-chat__drawer {
 		max-width: 100%;
 	}
 }

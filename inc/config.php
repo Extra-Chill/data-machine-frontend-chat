@@ -5,10 +5,10 @@
  * Each site in the network can configure which Data Machine agent powers
  * its floating chat, who can see it, and what the default description says.
  *
- * Configuration is stored in the site option `extrachill_roadie_config` and
- * can be overridden entirely via the `extrachill_roadie_config` filter.
+ * Configuration is stored in the site option `data_machine_frontend_chat_config` and
+ * can be overridden entirely via the `data_machine_frontend_chat_config` filter.
  *
- * @package ExtraChillRoadie
+ * @package DataMachineFrontendChat
  * @since 0.1.0
  */
 
@@ -26,15 +26,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   enabled: bool,
  * }
  */
-function extrachill_roadie_get_config(): array {
+function data_machine_frontend_chat_get_config(): array {
 	$defaults = array(
 		'agent_slug'  => '',
 		'visibility'  => 'team',
-		'description' => __( 'Your AI assistant for the Extra Chill platform.', 'extrachill-roadie' ),
+		'description' => __( 'Your AI assistant.', 'data-machine-frontend-chat' ),
 		'enabled'     => false,
 	);
 
-	$saved = get_option( 'extrachill_roadie_config', array() );
+	$saved = get_option( 'data_machine_frontend_chat_config', array() );
 	$config = wp_parse_args( $saved, $defaults );
 
 	/**
@@ -47,16 +47,16 @@ function extrachill_roadie_get_config(): array {
 	 *
 	 * @param array $config Current configuration.
 	 */
-	return apply_filters( 'extrachill_roadie_config', $config );
+	return apply_filters( 'data_machine_frontend_chat_config', $config );
 }
 
 /**
  * Check whether the current user can see the Roadie chat.
  *
- * @param array $config Roadie config (from extrachill_roadie_get_config).
+ * @param array $config Roadie config (from data_machine_frontend_chat_get_config).
  * @return bool
  */
-function extrachill_roadie_user_can_see( array $config ): bool {
+function data_machine_frontend_chat_user_can_see( array $config ): bool {
 	$visibility = $config['visibility'] ?? 'team';
 
 	switch ( $visibility ) {
@@ -71,11 +71,21 @@ function extrachill_roadie_user_can_see( array $config ): bool {
 			if ( ! is_user_logged_in() ) {
 				return false;
 			}
-			if ( function_exists( 'ec_is_team_member' ) ) {
-				return ec_is_team_member();
-			}
-			// Fallback: require manage_options if ec_is_team_member isn't available.
-			return current_user_can( 'manage_options' );
+			/**
+			 * Filter whether the current user is considered a "team" member
+			 * for the purpose of showing the chat widget.
+			 *
+			 * Defaults to `manage_options` capability check. Consuming plugins
+			 * can hook this to use their own team-membership logic.
+			 *
+			 * @since 0.4.0
+			 *
+			 * @param bool $is_team Whether the current user is a team member.
+			 */
+			return apply_filters(
+				'data_machine_frontend_chat_is_team_member',
+				current_user_can( 'manage_options' )
+			);
 	}
 }
 
@@ -88,7 +98,7 @@ function extrachill_roadie_user_can_see( array $config ): bool {
  * @param string $slug Agent slug to resolve.
  * @return array|null Agent row (agent_id, agent_slug, agent_name, …) or null.
  */
-function extrachill_roadie_resolve_agent( string $slug ): ?array {
+function data_machine_frontend_chat_resolve_agent( string $slug ): ?array {
 	static $cache = array();
 
 	if ( isset( $cache[ $slug ] ) ) {

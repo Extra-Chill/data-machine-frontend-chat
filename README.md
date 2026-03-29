@@ -10,10 +10,10 @@ The chat connects to a Data Machine agent — which agent, who can see it, and w
 
 ## Configuration
 
-Each site in the network configures Roadie via the `extrachill_roadie_config` option:
+Each site in the network configures Roadie via the `data_machine_frontend_chat_config` option:
 
 ```php
-update_option( 'extrachill_roadie_config', [
+update_option( 'data_machine_frontend_chat_config', [
     'agent_slug'  => 'roadie',
     'visibility'  => 'team',
     'description' => 'Your AI assistant.',
@@ -28,7 +28,7 @@ update_option( 'extrachill_roadie_config', [
 | `description` | `string` | Shown in the empty state before the first message |
 | `enabled` | `bool` | Toggle the chat on/off for this site |
 
-The config can also be overridden entirely via the `extrachill_roadie_config` filter.
+The config can also be overridden entirely via the `data_machine_frontend_chat_config` filter.
 
 ## Requirements
 
