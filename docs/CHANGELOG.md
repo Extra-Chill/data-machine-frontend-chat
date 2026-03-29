@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.2] - 2026-03-29
+
+### Changed
+- update @extrachill/chat to ^0.8.0
+
 ## [0.4.1] - 2026-03-29
 
 ### Changed
