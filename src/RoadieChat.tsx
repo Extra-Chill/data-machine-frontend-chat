@@ -22,7 +22,6 @@ import {
 	parseCanonicalDiffFromToolGroup,
 } from '@extrachill/chat';
 import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
-import type { UseChatReturn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
 
 interface RoadieChatProps {
@@ -72,55 +71,6 @@ function renderDiffCard( group: ToolGroup ): ReactNode {
 		onAccept: ( id: string ) => resolveDiff( id, 'accepted' ),
 		onReject: ( id: string ) => resolveDiff( id, 'rejected' ),
 	} );
-}
-
-function getSessionLabel( chat: UseChatReturn ): string {
-	if ( ! chat.sessionId ) {
-		return 'New chat';
-	}
-
-	const activeSession = chat.sessions.find( ( session ) => session.id === chat.sessionId );
-	if ( activeSession?.title ) {
-		return activeSession.title;
-	}
-
-	return `Session ${ chat.sessionId.slice( 0, 8 ) }`;
-}
-
-function renderRoadieHeaderControls( chat: UseChatReturn ): ReactNode {
-	return createElement(
-		'div',
-		{ className: 'datamachine-chat__chatbar' },
-		createElement(
-			'div',
-			{ className: 'datamachine-chat__session-summary' },
-			createElement( 'span', { className: 'datamachine-chat__session-label' }, getSessionLabel( chat ) ),
-			createElement( 'span', { className: 'datamachine-chat__session-count' }, `${ chat.sessions.length } saved` )
-		),
-		createElement(
-			'div',
-			{ className: 'datamachine-chat__session-actions' },
-			createElement(
-				'button',
-				{
-					type: 'button',
-					className: 'datamachine-chat__session-button',
-					onClick: () => chat.refreshSessions(),
-					disabled: chat.sessionsLoading,
-				},
-				chat.sessionsLoading ? 'Refreshing…' : 'Refresh'
-			),
-			createElement(
-				'button',
-				{
-					type: 'button',
-					className: 'datamachine-chat__session-button datamachine-chat__session-button--new',
-					onClick: () => chat.newSession(),
-				},
-				'New'
-			)
-		)
-	);
 }
 
 export default function RoadieChat( {
@@ -191,9 +141,8 @@ export default function RoadieChat( {
 					agentId,
 					showTools: true,
 					showSessions: true,
-					sessionUi: 'none',
+					sessionUi: 'list',
 					toolRenderers,
-					renderHeader: renderRoadieHeaderControls,
 					placeholder: __( `Ask ${ agentName } anything…`, 'data-machine-frontend-chat' ),
 					metadata,
 					emptyState: createElement(
