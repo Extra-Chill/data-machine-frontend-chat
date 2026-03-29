@@ -34,7 +34,7 @@ function data_machine_frontend_chat_get_config(): array {
 		'enabled'     => false,
 	);
 
-	$saved = get_option( 'data_machine_frontend_chat_config', array() );
+	$saved  = get_option( 'data_machine_frontend_chat_config', array() );
 	$config = wp_parse_args( $saved, $defaults );
 
 	/**
@@ -111,7 +111,7 @@ function data_machine_frontend_chat_resolve_agent( string $slug ): ?array {
 		return null;
 	}
 
-	$repo = new \DataMachine\Core\Database\Agents\Agents();
+	$repo  = new \DataMachine\Core\Database\Agents\Agents();
 	$agent = $repo->get_by_slug( $slug );
 
 	$cache[ $slug ] = $agent;
