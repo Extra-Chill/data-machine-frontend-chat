@@ -1,20 +1,20 @@
-# Extra Chill Roadie
+# Data Machine Frontend Chat
 
-Floating agent chat for WordPress. Connects to [Data Machine](https://github.com/Extra-Chill/data-machine)'s agent system to provide an AI assistant on any site in the network.
+Floating agent chat widget for WordPress. Connects to [Data Machine](https://github.com/Extra-Chill/data-machine)'s agent system to provide a configurable AI assistant on any site.
 
 ## How it works
 
-Roadie is a small React app that mounts a floating action button (FAB) in the bottom-right corner of every page. Click it and a slide-in drawer opens with a full chat interface powered by the [`@extrachill/chat`](https://www.npmjs.com/package/@extrachill/chat) package.
+A small React app mounts a floating action button (FAB) in the bottom-right corner of every page. Click it and a slide-in drawer opens with a full chat interface powered by the [`@extrachill/chat`](https://www.npmjs.com/package/@extrachill/chat) package.
 
-The chat connects to a Data Machine agent — which agent, who can see it, and what it says are all configurable per site.
+The chat connects to a Data Machine agent — which agent, who can see it, and what it says are all configurable per site. This plugin is a pure frontend shell with no business logic or tools. Tools are registered by other plugins via the `datamachine_tools` filter and Data Machine picks them up automatically.
 
 ## Configuration
 
-Each site in the network configures Roadie via the `data_machine_frontend_chat_config` option:
+Each site configures the chat widget via the `data_machine_frontend_chat_config` option:
 
 ```php
 update_option( 'data_machine_frontend_chat_config', [
-    'agent_slug'  => 'roadie',
+    'agent_slug'  => 'my-agent',
     'visibility'  => 'team',
     'description' => 'Your AI assistant.',
     'enabled'     => true,
@@ -30,6 +30,8 @@ update_option( 'data_machine_frontend_chat_config', [
 
 The config can also be overridden entirely via the `data_machine_frontend_chat_config` filter.
 
+Team visibility is controlled by the `data_machine_frontend_chat_is_team_member` filter (defaults to `manage_options`).
+
 ## Requirements
 
 - WordPress 6.9+
@@ -40,12 +42,12 @@ The config can also be overridden entirely via the `data_machine_frontend_chat_c
 
 ```
 Browser                          Server
-───────                          ──────
-FAB → Drawer → <Chat>    ──→    /datamachine/v1/chat
-      (React)                    ChatOrchestrator
-      @extrachill/chat           → Agent memory
-                                 → Tool calling
-                                 → Multi-turn conversation
+-------                          ------
+FAB -> Drawer -> <Chat>    -->   /datamachine/v1/chat
+       (React)                   ChatOrchestrator
+       @extrachill/chat          -> Agent memory
+                                 -> Tool calling
+                                 -> Multi-turn conversation
 ```
 
 - **Frontend**: `@extrachill/chat` package, mounted via `wp_footer` hook
@@ -60,9 +62,14 @@ FAB → Drawer → <Chat>    ──→    /datamachine/v1/chat
 - Admin bar aware (offsets below the WP toolbar)
 - Per-site agent configuration
 - Visibility controls (team only, logged in, or public)
-- CSS variable theming via Extra Chill design tokens
+- CSS variable theming with fallback values for standalone use
+- DiffCard rendering for inline code diffs
 - Mobile responsive (full-width drawer on small screens)
 - Network-activated (one plugin, all sites)
+
+## CSS
+
+Class prefix: `datamachine-chat`. Theme tokens use `--datamachine-*` variables with fallback values so the widget works on any Data Machine site without requiring the Extra Chill theme.
 
 ## Development
 
