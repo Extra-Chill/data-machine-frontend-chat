@@ -141,7 +141,6 @@ export default function RoadieChat( {
 					agentId,
 					showTools: true,
 					showSessions: true,
-					sessionUi: 'list',
 					toolRenderers,
 					placeholder: __( `Ask ${ agentName } anything…`, 'data-machine-frontend-chat' ),
 					metadata,
