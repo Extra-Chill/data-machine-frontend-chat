@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.5] - 2026-03-29
+
+### Fixed
+- correct mount selector to match PHP container attribute
+
 ## [0.4.4] - 2026-03-29
 
 ### Fixed
