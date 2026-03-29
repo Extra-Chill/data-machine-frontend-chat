@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.4] - 2026-03-29
+
+### Fixed
+- use portable SessionSwitcher from @extrachill/chat, remove custom session header
+
 ## [0.4.3] - 2026-03-29
 
 ### Fixed
