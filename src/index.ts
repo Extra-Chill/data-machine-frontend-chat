@@ -8,11 +8,11 @@
  * @since 0.4.0
  */
 import '@extrachill/chat/css';
-import './roadie.css';
+import './agent-chat.css';
 import { createElement } from '@wordpress/element';
 import { createRoot, render } from '@wordpress/element';
 import type { ReactElement } from 'react';
-import RoadieChat from './RoadieChat';
+import AgentChat from './AgentChat';
 
 declare global {
 	interface Window {
@@ -51,7 +51,7 @@ function init(): void {
 	el.dataset.ecMounted = 'true';
 	mount(
 		el,
-		createElement( RoadieChat, {
+		createElement( AgentChat, {
 			agentId: config.agentId,
 			basePath: config.basePath,
 			agentName: config.agentName,
