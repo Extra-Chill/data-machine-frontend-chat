@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.3] - 2026-03-29
+
+### Fixed
+- hide duplicate session list and fix unicode close button
+
 ## [0.4.2] - 2026-03-29
 
 ### Changed
