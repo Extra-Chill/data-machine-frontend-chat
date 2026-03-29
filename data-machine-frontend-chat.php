@@ -12,7 +12,6 @@
  * Requires at least: 6.9
  * Tested up to: 6.9
  * Requires PHP: 7.4
- * Network: true
  *
  * @package DataMachineFrontendChat
  * @since 0.1.0
