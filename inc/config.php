@@ -24,13 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   agent_slug: string,
  *   description: string,
  *   enabled: bool,
+ *   loading_messages: array{mode?: string, messages?: string[], interval?: int}|bool,
  * }
  */
 function data_machine_frontend_chat_get_config(): array {
 	$defaults = array(
-		'agent_slug'  => '',
-		'description' => __( 'Your AI assistant.', 'data-machine-frontend-chat' ),
-		'enabled'     => false,
+		'agent_slug'       => '',
+		'description'      => __( 'Your AI assistant.', 'data-machine-frontend-chat' ),
+		'enabled'          => false,
+		'loading_messages' => true,
 	);
 
 	$saved  = get_option( 'data_machine_frontend_chat_config', array() );

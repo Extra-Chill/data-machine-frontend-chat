@@ -62,15 +62,21 @@ function data_machine_frontend_chat_enqueue() {
 		);
 	}
 
+	$js_config = array(
+		'agentId'          => (int) $agent['agent_id'],
+		'basePath'         => '/datamachine/v1/chat',
+		'agentName'        => (string) $agent['agent_name'],
+		'agentDescription' => (string) $config['description'],
+	);
+
+	if ( isset( $config['loading_messages'] ) ) {
+		$js_config['loadingMessages'] = $config['loading_messages'];
+	}
+
 	wp_localize_script(
 		'data-machine-frontend-chat',
 		'datamachineChatConfig',
-		array(
-			'agentId'          => (int) $agent['agent_id'],
-			'basePath'         => '/datamachine/v1/chat',
-			'agentName'        => (string) $agent['agent_name'],
-			'agentDescription' => (string) $config['description'],
-		)
+		$js_config
 	);
 }
 add_action( 'wp_enqueue_scripts', 'data_machine_frontend_chat_enqueue' );

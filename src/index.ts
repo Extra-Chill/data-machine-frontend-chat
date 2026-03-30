@@ -21,6 +21,11 @@ declare global {
 			basePath: string;
 			agentName: string;
 			agentDescription: string;
+			loadingMessages?: boolean | {
+				mode?: 'default' | 'extend' | 'override';
+				messages?: string[];
+				interval?: number;
+			};
 		};
 	}
 }
@@ -56,6 +61,7 @@ function init(): void {
 			basePath: config.basePath,
 			agentName: config.agentName,
 			agentDescription: config.agentDescription,
+			loadingMessages: config.loadingMessages ?? true,
 		} )
 	);
 }

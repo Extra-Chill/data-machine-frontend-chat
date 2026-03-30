@@ -29,6 +29,11 @@ interface AgentChatProps {
 	basePath: string;
 	agentName: string;
 	agentDescription: string;
+	loadingMessages?: boolean | {
+		mode?: 'default' | 'extend' | 'override';
+		messages?: string[];
+		interval?: number;
+	};
 }
 
 /**
@@ -78,6 +83,7 @@ export default function AgentChat( {
 	basePath,
 	agentName,
 	agentDescription,
+	loadingMessages = true,
 }: AgentChatProps ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 	const metadata = useClientContextMetadata();
@@ -150,7 +156,7 @@ export default function AgentChat( {
 						createElement( 'h3', null, agentName ),
 						createElement( 'p', null, agentDescription )
 					),
-				loadingMessages: true,
+				loadingMessages,
 				processingLabel: ( turnCount: number ) =>
 					__( `Working… (turn ${ turnCount })`, 'data-machine-frontend-chat' ),
 				} )
