@@ -1,5 +1,5 @@
 /**
- * RoadieChat — Floating agent chat panel with diff visualization.
+ * AgentChat — Floating agent chat panel with diff visualization.
  *
  * FAB button at bottom-right → slide-in drawer from the right.
  * The Chat component stays mounted when the drawer closes so session
@@ -24,11 +24,16 @@ import {
 import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
 
-interface RoadieChatProps {
+interface AgentChatProps {
 	agentId: number;
 	basePath: string;
 	agentName: string;
 	agentDescription: string;
+	loadingMessages?: boolean | {
+		mode?: 'default' | 'extend' | 'override';
+		messages?: string[];
+		interval?: number;
+	};
 }
 
 /**
@@ -48,11 +53,11 @@ function resolveDiff( diffId: string, decision: 'accepted' | 'rejected' ): void 
 		data: { diff_id: diffId, decision },
 	} ).catch( ( err: unknown ) => {
 		// eslint-disable-next-line no-console
-		console.error( 'Roadie: failed to resolve diff', diffId, err );
+		console.error( 'AgentChat: failed to resolve diff', diffId, err );
 	} );
 }
 
-const roadieFetch: FetchFn = ( options ) =>
+const agentFetch: FetchFn = ( options ) =>
 	apiFetch( {
 		path: options.path,
 		method: options.method,
@@ -73,12 +78,13 @@ function renderDiffCard( group: ToolGroup ): ReactNode {
 	} );
 }
 
-export default function RoadieChat( {
+export default function AgentChat( {
 	agentId,
 	basePath,
 	agentName,
 	agentDescription,
-}: RoadieChatProps ) {
+	loadingMessages = true,
+}: AgentChatProps ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 	const metadata = useClientContextMetadata();
 	const open = useCallback( () => setIsOpen( true ), [] );
@@ -137,7 +143,7 @@ export default function RoadieChat( {
 				{ className: 'datamachine-chat__body' },
 				createElement( Chat, {
 					basePath,
-					fetchFn: roadieFetch,
+					fetchFn: agentFetch,
 					agentId,
 					showTools: true,
 					showSessions: true,
@@ -150,7 +156,7 @@ export default function RoadieChat( {
 						createElement( 'h3', null, agentName ),
 						createElement( 'p', null, agentDescription )
 					),
-				loadingMessages: true,
+				loadingMessages,
 				processingLabel: ( turnCount: number ) =>
 					__( `Working… (turn ${ turnCount })`, 'data-machine-frontend-chat' ),
 				} )
