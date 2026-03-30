@@ -12,7 +12,7 @@
  * @package DataMachineFrontendChat
  * @since 0.3.0
  */
-import { createElement, useState, useCallback, useMemo } from '@wordpress/element';
+import { createElement, useState, useCallback, useMemo, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
@@ -114,9 +114,21 @@ export default function AgentChat( {
 	loadingMessages = true,
 }: AgentChatProps ) {
 	const [ isOpen, setIsOpen ] = useState( false );
+	const [ unreadCount, setUnreadCount ] = useState( 0 );
 	const metadata = useClientContextMetadata();
 	const open = useCallback( () => setIsOpen( true ), [] );
 	const close = useCallback( () => setIsOpen( false ), [] );
+
+	// Close drawer on Escape key.
+	useEffect( () => {
+		function handleKeyDown( e: KeyboardEvent ) {
+			if ( e.key === 'Escape' && isOpen ) {
+				setIsOpen( false );
+			}
+		}
+		document.addEventListener( 'keydown', handleKeyDown );
+		return () => document.removeEventListener( 'keydown', handleKeyDown );
+	}, [ isOpen ] );
 
 	const toolRenderers = useMemo(
 		() => ( {
@@ -130,17 +142,22 @@ export default function AgentChat( {
 	return createElement(
 		'div',
 		{ className: 'datamachine-chat' },
-		! isOpen &&
-			createElement(
-				'button',
-				{
-					type: 'button',
-					className: 'datamachine-chat__fab',
-					onClick: open,
-					'aria-label': __( `Open ${ agentName } chat`, 'data-machine-frontend-chat' ),
-				},
-				agentName
-			),
+		createElement(
+			'button',
+			{
+				type: 'button',
+				className: `datamachine-chat__fab${ isOpen ? ' is-hidden' : '' }`,
+				onClick: open,
+				'aria-label': __( `Open ${ agentName } chat`, 'data-machine-frontend-chat' ),
+			},
+			agentName,
+			unreadCount > 0 &&
+				createElement(
+					'span',
+					{ className: 'datamachine-chat__fab-badge' },
+					unreadCount > 99 ? '99+' : unreadCount
+				)
+		),
 		createElement(
 			'div',
 			{
@@ -178,6 +195,8 @@ export default function AgentChat( {
 					toolRenderers,
 					placeholder: __( `Ask ${ agentName } anything…`, 'data-machine-frontend-chat' ),
 					metadata,
+					isVisible: isOpen,
+					onUnreadChange: setUnreadCount,
 					emptyState: createElement(
 						'div',
 						{ className: 'datamachine-chat__empty' },
