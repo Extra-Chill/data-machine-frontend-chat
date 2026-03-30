@@ -24,6 +24,12 @@ import {
 import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
 
+/**
+ * Upload function provided by the consumer.
+ * Matches @extrachill/chat MediaUploadFn (available in v0.9.0+).
+ */
+type MediaUploadFn = ( file: File ) => Promise<{ url: string; media_id?: number }>;
+
 interface AgentChatProps {
 	agentId: number;
 	basePath: string;
@@ -64,6 +70,28 @@ const agentFetch: FetchFn = ( options ) =>
 		data: options.data,
 		headers: options.headers,
 	} );
+
+/**
+ * Upload a file to the WordPress Media Library.
+ *
+ * Uses the standard wp/v2/media endpoint via @wordpress/api-fetch,
+ * which handles nonce auth automatically.
+ */
+const wpMediaUpload: MediaUploadFn = async ( file: File ) => {
+	const formData = new FormData();
+	formData.append( 'file', file );
+
+	const media = await apiFetch( {
+		path: '/wp/v2/media',
+		method: 'POST',
+		body: formData,
+	} ) as { id: number; source_url: string };
+
+	return {
+		url: media.source_url,
+		media_id: media.id,
+	};
+};
 
 function renderDiffCard( group: ToolGroup ): ReactNode {
 	const diff = parseDiffFromToolResult( group );
@@ -157,6 +185,7 @@ export default function AgentChat( {
 						createElement( 'p', null, agentDescription )
 					),
 				loadingMessages,
+				mediaUploadFn: wpMediaUpload,
 				processingLabel: ( turnCount: number ) =>
 					__( `Working… (turn ${ turnCount })`, 'data-machine-frontend-chat' ),
 				} )
