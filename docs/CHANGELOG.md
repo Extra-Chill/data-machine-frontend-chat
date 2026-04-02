@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.0] - 2026-04-02
+
+### Added
+- add FAB unread badge, escape key, safe-area inset
+- wire mediaUploadFn for WordPress media library uploads
+- expose loadingMessages config from PHP to JS
+
+### Changed
+- remove all Roadie references from source files
+
+### Fixed
+- remove admin bar offset on mobile where the bar scrolls away
+
 ## [0.4.5] - 2026-03-29
 
 ### Fixed
