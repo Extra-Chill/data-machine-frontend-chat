@@ -2,43 +2,34 @@
  * Data Machine Frontend Chat — Floating agent chat styles.
  *
  * Standalone stylesheet for the floating chat widget.
- * All custom properties are namespaced --datamachine-* to avoid
- * coupling to any specific theme. Consumers (themes, plugins)
- * set these properties on :root or a parent container to theme
- * the widget.
+ * Uses --datamachine-* tokens from Data Machine core where available,
+ * with widget-specific properties for FAB/drawer chrome.
  *
- * Theme contract (set on :root or a parent element):
+ * Shared tokens (from DM core root.css):
+ *   --datamachine-text-primary, --datamachine-text-muted,
+ *   --datamachine-border-1, --datamachine-bg-light,
+ *   --datamachine-blue, --datamachine-color-error,
+ *   --datamachine-spacing-md, --datamachine-spacing-lg,
+ *   --datamachine-border-radius
  *
- *   FAB:
- *     --datamachine-fab-bg               (default: #1a1a2e)
- *     --datamachine-fab-color            (default: #fff)
- *     --datamachine-fab-border-color     (default: transparent)
- *     --datamachine-fab-font-family      (default: system)
- *     --datamachine-fab-font-size        (default: 15px)
- *     --datamachine-fab-badge-bg         (default: #ef4444)
- *     --datamachine-fab-offset           (default: 24px)
- *
- *   Drawer:
- *     --datamachine-drawer-bg            (default: #f1f5f9)
- *     --datamachine-drawer-border-color  (default: #e2e8f0)
- *     --datamachine-drawer-width         (default: 420px)
- *
- *   Header:
- *     --datamachine-header-font-family   (default: system)
- *     --datamachine-header-font-size     (default: 18px)
- *     --datamachine-header-color         (default: #1e293b)
- *     --datamachine-header-padding       (default: 8px 16px)
- *
- *   Body / Chat mapping:
- *     --datamachine-text-color           (default: #1e293b)
- *     --datamachine-text-muted           (default: #94a3b8)
- *     --datamachine-bg                   (default: #f8fafc)
- *     --datamachine-accent               (default: #2563eb)
- *     --datamachine-font-family          (default: system)
+ * Widget-specific tokens (set on :root or parent):
+ *   --datamachine-fab-bg               (default: #1a1a2e)
+ *   --datamachine-fab-color            (default: #fff)
+ *   --datamachine-fab-border-color     (default: transparent)
+ *   --datamachine-fab-font-family      (default: system)
+ *   --datamachine-fab-font-size        (default: 15px)
+ *   --datamachine-fab-badge-bg         (default: --datamachine-color-error)
+ *   --datamachine-fab-offset           (default: 24px)
+ *   --datamachine-drawer-bg            (default: --datamachine-bg-light)
+ *   --datamachine-drawer-width         (default: 420px)
+ *   --datamachine-header-font-family   (default: system)
+ *   --datamachine-header-font-size     (default: 18px)
+ *   --datamachine-font-family          (default: system)
  *
  * @package DataMachineFrontendChat
  * @since 0.4.0
  * @since 0.7.0 Namespaced all custom properties to --datamachine-*.
+ * @since 0.8.0 Aligned with Data Machine core design tokens.
  */
 
 /* Root container — viewport-level, non-interactive wrapper. */
@@ -103,7 +94,7 @@
 	height: 20px;
 	padding: 0 6px;
 	border-radius: 10px;
-	background: var(--datamachine-fab-badge-bg, #ef4444);
+	background: var(--datamachine-fab-badge-bg, var(--datamachine-color-error, #ef4444));
 	color: #fff;
 	font-size: 11px;
 	font-weight: 700;
@@ -143,8 +134,8 @@
 	max-width: var(--datamachine-drawer-width, 420px);
 	display: flex;
 	flex-direction: column;
-	background: var(--datamachine-drawer-bg, #f1f5f9);
-	border-left: 1px solid var(--datamachine-drawer-border-color, #e2e8f0);
+	background: var(--datamachine-drawer-bg, var(--datamachine-bg-light, #f1f5f9));
+	border-left: 1px solid var(--datamachine-border-1, #e2e8f0);
 	box-shadow: -4px 0 24px rgba(0, 0, 0, 0.2);
 	pointer-events: auto;
 
@@ -174,8 +165,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: var(--datamachine-header-padding, 8px 16px);
-	border-bottom: 1px solid var(--datamachine-drawer-border-color, #e2e8f0);
+	padding: var(--datamachine-spacing-xs, 8px) var(--datamachine-spacing-md, 16px);
+	border-bottom: 1px solid var(--datamachine-border-1, #e2e8f0);
 	flex-shrink: 0;
 }
 
@@ -183,7 +174,7 @@
 	font-family: var(--datamachine-header-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
 	font-size: var(--datamachine-header-font-size, 18px);
 	font-weight: 700;
-	color: var(--datamachine-header-color, #1e293b);
+	color: var(--datamachine-text-primary, #1e293b);
 }
 
 .datamachine-chat__close {
@@ -195,14 +186,14 @@
 	border: none;
 	border-radius: 50%;
 	background: transparent;
-	color: var(--datamachine-header-color, #1e293b);
+	color: var(--datamachine-text-primary, #1e293b);
 	font-size: 18px;
 	cursor: pointer;
 	transition: background 0.15s;
 }
 
 .datamachine-chat__close:hover {
-	background: var(--datamachine-bg, #f8fafc);
+	background: var(--datamachine-bg-light, #f8fafc);
 }
 
 /* ── Body (Chat) ─────────────────────────────────────── */
@@ -213,24 +204,24 @@
 	overflow: hidden;
 }
 
-/* Map --datamachine-* properties to @extrachill/chat --ec-chat-* variables. */
+/* Map --datamachine-* tokens to @extrachill/chat --ec-chat-* variables. */
 .datamachine-chat__body .ec-chat {
-	--ec-chat-bg: var(--datamachine-drawer-bg, #f1f5f9);
-	--ec-chat-text: var(--datamachine-text-color, #1e293b);
+	--ec-chat-bg: var(--datamachine-drawer-bg, var(--datamachine-bg-light, #f1f5f9));
+	--ec-chat-text: var(--datamachine-text-primary, #1e293b);
 	--ec-chat-text-muted: var(--datamachine-text-muted, #94a3b8);
-	--ec-chat-border: var(--datamachine-drawer-border-color, #e2e8f0);
-	--ec-chat-user-bg: var(--datamachine-accent, #2563eb);
-	--ec-chat-user-text: var(--datamachine-bg, #f8fafc);
-	--ec-chat-assistant-bg: var(--datamachine-bg, #f8fafc);
-	--ec-chat-assistant-text: var(--datamachine-text-color, #1e293b);
-	--ec-chat-input-bg: var(--datamachine-bg, #f8fafc);
-	--ec-chat-input-border: var(--datamachine-drawer-border-color, #e2e8f0);
-	--ec-chat-input-focus-border: var(--datamachine-accent, #2563eb);
-	--ec-chat-send-bg: var(--datamachine-accent, #2563eb);
-	--ec-chat-send-text: var(--datamachine-bg, #f8fafc);
-	--ec-chat-tool-bg: var(--datamachine-bg, #f8fafc);
-	--ec-chat-tool-border: var(--datamachine-drawer-border-color, #e2e8f0);
-	--ec-chat-session-hover-bg: var(--datamachine-drawer-border-color, #e2e8f0);
+	--ec-chat-border: var(--datamachine-border-1, #e2e8f0);
+	--ec-chat-user-bg: var(--datamachine-blue, #2563eb);
+	--ec-chat-user-text: #fff;
+	--ec-chat-assistant-bg: var(--datamachine-bg-lighter, #f8fafc);
+	--ec-chat-assistant-text: var(--datamachine-text-primary, #1e293b);
+	--ec-chat-input-bg: var(--datamachine-bg-lighter, #f8fafc);
+	--ec-chat-input-border: var(--datamachine-border-1, #e2e8f0);
+	--ec-chat-input-focus-border: var(--datamachine-blue, #2563eb);
+	--ec-chat-send-bg: var(--datamachine-blue, #2563eb);
+	--ec-chat-send-text: #fff;
+	--ec-chat-tool-bg: var(--datamachine-bg-lighter, #f8fafc);
+	--ec-chat-tool-border: var(--datamachine-border-1, #e2e8f0);
+	--ec-chat-session-hover-bg: var(--datamachine-border-1, #e2e8f0);
 	--ec-chat-font-family: var(--datamachine-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
 	--ec-chat-border-radius: 0;
 
@@ -242,13 +233,13 @@
 
 .datamachine-chat__empty {
 	text-align: center;
-	padding: 24px;
+	padding: var(--datamachine-spacing-lg, 24px);
 }
 
 .datamachine-chat__empty h3 {
 	margin: 0 0 4px;
 	font-family: var(--datamachine-header-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-	color: var(--datamachine-text-color, #1e293b);
+	color: var(--datamachine-text-primary, #1e293b);
 }
 
 .datamachine-chat__empty p {
