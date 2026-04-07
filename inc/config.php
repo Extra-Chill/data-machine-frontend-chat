@@ -1,13 +1,19 @@
 <?php
 /**
- * Configuration — per-site agent settings.
+ * Configuration — per-site and network-wide agent settings.
  *
  * Each site configures which Data Machine agent powers its floating chat.
+ * On multisite, a network-wide option serves as the default for all sites.
+ * Per-site options override the network default (including opting out).
+ *
  * Visibility is determined by Data Machine's agent access system:
  * PermissionHelper::can_access_agent(). No custom permission logic here.
  *
- * Configuration is stored in the site option `data_machine_frontend_chat_config`
- * and can be overridden via the `data_machine_frontend_chat_config` filter.
+ * Resolution order:
+ *   1. Per-site option  (get_option)
+ *   2. Network option   (get_site_option, multisite only)
+ *   3. Filter           (data_machine_frontend_chat_config)
+ *   4. Hardcoded defaults
  *
  * @package DataMachineFrontendChat
  * @since 0.4.0
@@ -19,6 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Get the frontend chat configuration for the current site.
+ *
+ * On multisite, falls back to the network-wide option when the current
+ * site has no per-site config. This lets you configure the agent once
+ * and have it apply across all sites in the network.
+ *
+ * @since 0.4.0
+ * @since 0.6.0 Added network option fallback for multisite.
  *
  * @return array{
  *   agent_slug: string,
@@ -35,7 +48,13 @@ function data_machine_frontend_chat_get_config(): array {
 		'loading_messages' => true,
 	);
 
-	$saved  = get_option( 'data_machine_frontend_chat_config', array() );
+	$saved = get_option( 'data_machine_frontend_chat_config', array() );
+
+	// On multisite, fall back to the network option when no per-site config exists.
+	if ( empty( $saved ) && is_multisite() ) {
+		$saved = get_site_option( 'data_machine_frontend_chat_config', array() );
+	}
+
 	$config = wp_parse_args( $saved, $defaults );
 
 	/**
