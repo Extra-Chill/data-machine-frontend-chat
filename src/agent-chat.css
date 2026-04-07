@@ -35,7 +35,7 @@
 	justify-content: center;
 	height: 56px;
 	padding: 0 var(--spacing-lg, 24px);
-	border: 1px solid var(--datamachine-fab-border-color, transparent);
+	border: 1px solid var(--datamachine-fab-border-color, var(--border-color, transparent));
 	border-radius: 28px;
 	background: var(--header-background, #1a1a2e);
 	color: var(--header-text-color, #fff);
