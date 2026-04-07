@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.0] - 2026-04-07
+
+### Added
+- FAB border defaults to theme --border-color token
+- add --datamachine-fab-border-color CSS custom property to FAB
+
+### Changed
+- namespace all CSS custom properties to --datamachine-*
+
 ## [0.6.0] - 2026-04-07
 
 ### Added
