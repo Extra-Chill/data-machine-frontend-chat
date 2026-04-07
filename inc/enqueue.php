@@ -69,7 +69,7 @@ function data_machine_frontend_chat_enqueue() {
 		'agentDescription' => (string) $config['description'],
 	);
 
-	if ( isset( $config['loading_messages'] ) ) {
+	if ( ! empty( $config['loading_messages'] ) ) {
 		$js_config['loadingMessages'] = $config['loading_messages'];
 	}
 
