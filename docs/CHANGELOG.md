@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0] - 2026-04-07
+
+### Added
+- add network-wide config fallback for multisite
+
+### Fixed
+- phpstan isset warning on loading_messages, gitignore build meta
+
 ## [0.5.0] - 2026-04-02
 
 ### Added
