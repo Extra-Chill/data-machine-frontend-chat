@@ -3,7 +3,7 @@
  * Plugin Name: Data Machine Frontend Chat
  * Plugin URI: https://github.com/nicholashuber/data-machine-frontend-chat
  * Description: Floating agent chat widget for Data Machine. Provides a configurable AI assistant on any WordPress site powered by Data Machine.
- * Version: 0.7.0
+ * Version: 0.7.1
  * Author: Chris Huber
  * Author URI: https://chubes.net
  * License: GPL v2 or later
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DATA_MACHINE_FRONTEND_CHAT_VERSION', '0.7.0' );
+define( 'DATA_MACHINE_FRONTEND_CHAT_VERSION', '0.7.1' );
 define( 'DATA_MACHINE_FRONTEND_CHAT_PLUGIN_FILE', __FILE__ );
 define( 'DATA_MACHINE_FRONTEND_CHAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DATA_MACHINE_FRONTEND_CHAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

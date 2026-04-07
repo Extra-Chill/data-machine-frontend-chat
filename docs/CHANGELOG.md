@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.7.1] - 2026-04-07
+
+### Changed
+- align CSS with DM core tokens (text-primary, border-1, bg-light, blue)
+
 ## [0.7.0] - 2026-04-07
 
 ### Added
