@@ -5,9 +5,10 @@
  * The Chat component stays mounted when the drawer closes so session
  * state, messages, and scroll position survive open/close cycles.
  *
- * When AI uses content-editing tools (edit_post_blocks, replace_post_blocks)
- * with preview mode, the tool result is rendered as a DiffCard with
- * Accept/Reject buttons instead of raw JSON.
+ * When AI uses a pending-action tool (edit_post_blocks, replace_post_blocks,
+ * insert_content) with preview mode, the tool result is rendered as a
+ * DiffCard with Accept/Reject buttons instead of raw JSON. Accept/Reject
+ * hit Data Machine's unified /actions/resolve endpoint.
  *
  * @package DataMachineFrontendChat
  * @since 0.3.0
@@ -21,14 +22,8 @@ import {
 	useClientContextMetadata,
 	parseCanonicalDiffFromToolGroup,
 } from '@extrachill/chat';
-import type { ToolGroup, DiffData, FetchFn } from '@extrachill/chat';
+import type { ToolGroup, DiffData, FetchFn, MediaUploadFn } from '@extrachill/chat';
 import type { ReactNode } from 'react';
-
-/**
- * Upload function provided by the consumer.
- * Matches @extrachill/chat MediaUploadFn (available in v0.9.0+).
- */
-type MediaUploadFn = ( file: File ) => Promise<{ url: string; media_id?: number }>;
 
 interface AgentChatProps {
 	agentId: number;
@@ -45,21 +40,33 @@ interface AgentChatProps {
 /**
  * Parse a tool result into DiffData for DiffCard rendering.
  *
- * Returns null if the tool result is not a preview diff (e.g. the tool
- * was called without preview=true, or the result is malformed).
+ * Returns null if the tool result is not a preview action (e.g. the
+ * tool was called without preview=true, or the result is malformed).
  */
 function parseDiffFromToolResult( group: ToolGroup ): DiffData | null {
 	return parseCanonicalDiffFromToolGroup( group );
 }
 
-function resolveDiff( diffId: string, decision: 'accepted' | 'rejected' ): void {
+/**
+ * Resolve a pending action by id.
+ *
+ * Data Machine unified its preview primitive on a generic pending-action
+ * model in PR #1171 (editor #5): the old /datamachine/v1/diff/resolve
+ * endpoint and `diff_id` parameter were removed in favour of
+ * /datamachine/v1/actions/resolve with `action_id`. The unified endpoint
+ * handles every preview-capable tool kind, not just content diffs, so
+ * this callback works uniformly for edit_post_blocks, replace_post_blocks,
+ * insert_content, and any future kind a plugin registers on the
+ * `datamachine_pending_action_handlers` filter.
+ */
+function resolvePendingAction( actionId: string, decision: 'accepted' | 'rejected' ): void {
 	apiFetch( {
-		path: '/datamachine/v1/diff/resolve',
+		path: '/datamachine/v1/actions/resolve',
 		method: 'POST',
-		data: { diff_id: diffId, decision },
+		data: { action_id: actionId, decision },
 	} ).catch( ( err: unknown ) => {
 		// eslint-disable-next-line no-console
-		console.error( 'AgentChat: failed to resolve diff', diffId, err );
+		console.error( 'AgentChat: failed to resolve pending action', actionId, err );
 	} );
 }
 
@@ -101,8 +108,8 @@ function renderDiffCard( group: ToolGroup ): ReactNode {
 
 	return createElement( DiffCard, {
 		diff,
-		onAccept: ( id: string ) => resolveDiff( id, 'accepted' ),
-		onReject: ( id: string ) => resolveDiff( id, 'rejected' ),
+		onAccept: ( actionId: string ) => resolvePendingAction( actionId, 'accepted' ),
+		onReject: ( actionId: string ) => resolvePendingAction( actionId, 'rejected' ),
 	} );
 }
 
