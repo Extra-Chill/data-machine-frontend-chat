@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.7.3] - 2026-05-03
+
+### Fixed
+- Fix broken Accept/Reject: call /actions/resolve, not /diff/resolve
+
 ## [0.7.1] - 2026-04-07
 
 ### Changed
